@@ -1,11 +1,11 @@
-
+import { Outlet } from "react-router-dom";
 
 const RootLayout = () => {
-    return (
-        <div>
-            <h2>Perfumes</h2>
-        </div>
-    );
+  return (
+    <main>
+      <Outlet />
+    </main>
+  );
 };
 
 export default RootLayout;
