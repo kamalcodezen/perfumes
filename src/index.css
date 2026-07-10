@@ -1,2 +1,56 @@
 @import "tailwindcss";
 @import "@heroui/styles";
+
+/* ==========================================================================
+   Tailwind CSS v4 Direct Theme Configuration
+   ========================================================================== */
+@theme {
+    --color-perf-bg: var(--perf-bg);
+    --color-perf-card: var(--perf-card);
+    --color-perf-border: var(--perf-border);
+    --color-perf-text-main: var(--perf-text-main);
+    --color-perf-text-muted: var(--perf-text-muted);
+    --color-perf-gold: var(--perf-gold);
+    --color-perf-input-bg: var(--perf-input-bg);
+}
+
+/* ==========================================================================
+   Luxury Theme CSS Variables Configuration (Light & Dark Mode)
+   ========================================================================== */
+:root {
+    /* Premium Light Mode Palette - Warm Cream & Luxury Chocolate */
+    --perf-bg: #fff6e5;
+    --perf-card: #f7e7d4;
+    --perf-border: #f7e7d4;
+    --perf-text-main: #4e2912;
+    --perf-text-muted: #7c6053;
+    --perf-gold: #e57c58;
+    --perf-input-bg: #fdfaf4;
+}
+
+:root.dark {
+    /* Premium Dark Mode Palette - Deep Ocean Navy & Classic Gold */
+    --perf-bg: #102b3a;
+    --perf-card: #0e1c28;
+    --perf-border: #1a3547;
+    --perf-text-main: #f5f6f8;
+    --perf-text-muted: #94a3b8;
+    --perf-gold: #c5a880;
+    --perf-input-bg: #0b1622;
+}
+
+/* ==========================================================================
+   Base HTML Elements Styling & Layout Normalization
+   ========================================================================== */
+body {
+    background-color: var(--perf-bg);
+    font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+    color: var(--perf-text-main);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* For Headings and Promotional Hero Texts */
+.font-serif-luxury {
+    font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+}
