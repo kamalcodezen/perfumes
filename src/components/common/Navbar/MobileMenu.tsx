@@ -1,9 +1,11 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { X } from "lucide-react";
 import UseTheme from "../../../hooks/UseTheme";
 import type { NavLinkItem } from "./navLinks";
 import Logo from "./Logo";
 import { getUserSession } from "../../../lib/core/session";
+import { signOUt } from "../../../lib/actions/auth.actions";
+import { toast } from "react-toastify";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -12,7 +14,21 @@ interface MobileMenuProps {
 }
 
 const MobileMenu = ({ isOpen, setIsOpen, links }: MobileMenuProps) => {
+  const navigate = useNavigate();
+
+  // user session
   const { user, loading } = getUserSession();
+
+  // logOut function
+  const handleLogout = async () => {
+    try {
+      await signOUt();
+      toast.success("Logged out successfully");
+      navigate("/");
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  };
 
   return (
     <>
@@ -77,14 +93,14 @@ const MobileMenu = ({ isOpen, setIsOpen, links }: MobileMenuProps) => {
             {/* CTA Buttons */}
             <div className="px-6 pt-3 pb-2 flex flex-col space-y-2.5 font-semibold">
               {/* Loading State */}
-              {!loading && !user && (
+              {loading && !user && (
                 <div className=" h-10 w-full animate-pulse rounded-md  bg-muted" />
               )}
 
               {!loading && !user && (
                 <>
                   <Link
-                    to="/login"
+                    to="/auth/signin"
                     onClick={() => setIsOpen(false)}
                     className="p-3 text-base border-3 border-perf-border rounded-xl text-center hover:bg-perf-text-muted/80 hover:text-white transition-all duration-300 cursor-pointer"
                   >
@@ -92,7 +108,7 @@ const MobileMenu = ({ isOpen, setIsOpen, links }: MobileMenuProps) => {
                   </Link>
 
                   <Link
-                    to="/register"
+                    to="/auth/signup"
                     onClick={() => setIsOpen(false)}
                     className="p-3 text-base border-3 border-perf-border rounded-xl text-center bg-perf-gold text-white hover:opacity-90 transition-all duration-300 cursor-pointer"
                   >
@@ -102,13 +118,15 @@ const MobileMenu = ({ isOpen, setIsOpen, links }: MobileMenuProps) => {
               )}
 
               {!loading && user && (
-                <Link
-                  to="/"
-                  onClick={() => setIsOpen(false)}
-                  className="p-3 text-base border-3 border-perf-border rounded-xl text-center hover:bg-perf-text-muted/80 hover:text-white transition-all duration-300 cursor-pointer"
+                <button
+                  onClick={() => {
+                    setIsOpen(false);
+                    handleLogout();
+                  }}
+                  className="p-3 text-base border-3 border-perf-border rounded-xl text-center bg-perf-gold text-white hover:opacity-95 transition-all duration-300 cursor-pointer"
                 >
                   Logout
-                </Link>
+                </button>
               )}
             </div>
 

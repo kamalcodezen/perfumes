@@ -7,13 +7,29 @@ import MobileMenu from "./MobileMenu";
 import { navbarLinks } from "./navbarLinks";
 import NavLinks from "./navLinks";
 import { getUserSession } from "../../../lib/core/session";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { signOUt } from "../../../lib/actions/auth.actions";
+import { toast } from "react-toastify";
 
 const Navbar = () => {
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
 
+  // user session
   const { user, loading } = getUserSession();
-  console.log(user);
+
+  // logOut function
+   const handleLogout = async () => {
+    try {
+      await signOUt();
+
+      toast.success("Logged out successfully");
+
+      navigate("/");
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  };
 
   return (
     <nav className="fixed top-0 left-0 w-full z-[100] transition-all duration-300 bg-black/70 backdrop-blur-md py-3">
@@ -63,12 +79,12 @@ const Navbar = () => {
 
               {!loading && user && (
                 <>
-                  <Link
-                    to="/"
+                  <button
+                    onClick={handleLogout}
                     className="p-2 px-3 text-base dark:text-black  text-white bg-perf-gold rounded-md ml-3 transition-all duration-300 cursor-pointer"
                   >
                     Logout
-                  </Link>
+                  </button>
                 </>
               )}
 
