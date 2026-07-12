@@ -8,7 +8,7 @@ import { navbarLinks } from "./navbarLinks";
 import NavLinks from "./navLinks";
 import { getUserSession } from "../../../lib/core/session";
 import { Link, useNavigate } from "react-router-dom";
-import { signOUt } from "../../../lib/actions/auth.actions";
+import { signOut } from "../../../lib/actions/signOut";
 import { toast } from "react-toastify";
 
 const Navbar = () => {
@@ -19,9 +19,9 @@ const Navbar = () => {
   const { user, loading } = getUserSession();
 
   // logOut function
-   const handleLogout = async () => {
+  const handleLogout = async () => {
     try {
-      await signOUt();
+      await signOut();
 
       toast.success("Logged out successfully");
 

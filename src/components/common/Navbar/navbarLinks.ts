@@ -13,11 +13,7 @@ export const navbarLinks: NavLinkItem[] = [
     label: "Collections",
   },
   {
-    path: "/best-sellers",
-    label: "Best Sellers",
-  },
-  {
-    path: "/about",
-    label: "Our Story",
+    path: "/dashboard",
+    label: "Dashboard",
   },
 ];

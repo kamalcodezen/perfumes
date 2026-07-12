@@ -4,7 +4,7 @@ import UseTheme from "../../../hooks/UseTheme";
 import type { NavLinkItem } from "./navLinks";
 import Logo from "./Logo";
 import { getUserSession } from "../../../lib/core/session";
-import { signOUt } from "../../../lib/actions/auth.actions";
+import { signOut } from "../../../lib/actions/signOut";
 import { toast } from "react-toastify";
 
 interface MobileMenuProps {
@@ -22,7 +22,7 @@ const MobileMenu = ({ isOpen, setIsOpen, links }: MobileMenuProps) => {
   // logOut function
   const handleLogout = async () => {
     try {
-      await signOUt();
+      await signOut();
       toast.success("Logged out successfully");
       navigate("/");
     } catch (error: any) {

@@ -55,7 +55,7 @@ const SignUp = () => {
       // Check for Better Auth Error Response
       if (res.error) {
         toast.error(res.error.message || "Failed to create account");
-        console.error("Better Auth Error:", res.error);
+        // console.error("Better Auth Error:", res.error);
       } else {
         toast.success("Account created successfully");
         navigate("/");
