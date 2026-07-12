@@ -1,11 +1,16 @@
 import AdminDashboardContent from "../../../components/dashboard/admin/AdminDashboardContent";
 import UserDashboardContent from "../../../components/dashboard/user/UserDashboardContent";
-import { authClient } from "../../../lib/auth-client";
+
+import { getUserSession } from "../../../lib/core/session";
 
 const DashboardHome = () => {
-  const { data } = authClient.useSession();
+  const { user } = getUserSession();
 
-  return data?.user?.role === "admin" ? (
+  const currentUser = user as typeof user & {
+    role?: "user" | "admin";
+  };
+
+  return currentUser?.role === "admin" ? (
     <AdminDashboardContent />
   ) : (
     <UserDashboardContent />

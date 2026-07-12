@@ -1,15 +1,19 @@
 import AdminProfileContent from "../../../components/dashboard/admin/AdminProfileContent";
 import UserProfileContent from "../../../components/dashboard/user/UserProfileContent";
-import { authClient } from "../../../lib/auth-client";
+import { getUserSession } from "../../../lib/core/session";
 
 const Profile = () => {
-  const { data } = authClient.useSession();
+  const { user } = getUserSession();
 
-  return data?.user?.role === "admin" ? (
-    <AdminProfileContent />
-  ) : (
-    <UserProfileContent />
-  );
+  const currentUser = user as typeof user & {
+    role?: "user" | "admin";
+  };
+
+  if (currentUser?.role === "admin") {
+    return <AdminProfileContent />;
+  }
+
+  return <UserProfileContent />;
 };
 
 export default Profile;
