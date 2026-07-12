@@ -3,6 +3,7 @@ import { X } from "lucide-react";
 import UseTheme from "../../../hooks/UseTheme";
 import type { NavLinkItem } from "./navLinks";
 import Logo from "./Logo";
+import { getUserSession } from "../../../lib/core/session";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -11,6 +12,8 @@ interface MobileMenuProps {
 }
 
 const MobileMenu = ({ isOpen, setIsOpen, links }: MobileMenuProps) => {
+  const { user, loading } = getUserSession();
+
   return (
     <>
       {/* Background Overlay */}
@@ -73,21 +76,40 @@ const MobileMenu = ({ isOpen, setIsOpen, links }: MobileMenuProps) => {
 
             {/* CTA Buttons */}
             <div className="px-6 pt-3 pb-2 flex flex-col space-y-2.5 font-semibold">
-              <Link
-                to="/login"
-                onClick={() => setIsOpen(false)}
-                className="p-3 text-base border-3 border-perf-border rounded-xl text-center hover:bg-perf-text-muted/80 hover:text-white transition-all duration-300 cursor-pointer"
-              >
-                Login
-              </Link>
+              {/* Loading State */}
+              {!loading && !user && (
+                <div className=" h-10 w-full animate-pulse rounded-md  bg-muted" />
+              )}
 
-              <Link
-                to="/register"
-                onClick={() => setIsOpen(false)}
-                className="p-3 text-base border-3 border-perf-border rounded-xl text-center bg-perf-gold text-white hover:opacity-90 transition-all duration-300 cursor-pointer"
-              >
-                Register
-              </Link>
+              {!loading && !user && (
+                <>
+                  <Link
+                    to="/login"
+                    onClick={() => setIsOpen(false)}
+                    className="p-3 text-base border-3 border-perf-border rounded-xl text-center hover:bg-perf-text-muted/80 hover:text-white transition-all duration-300 cursor-pointer"
+                  >
+                    Login
+                  </Link>
+
+                  <Link
+                    to="/register"
+                    onClick={() => setIsOpen(false)}
+                    className="p-3 text-base border-3 border-perf-border rounded-xl text-center bg-perf-gold text-white hover:opacity-90 transition-all duration-300 cursor-pointer"
+                  >
+                    Register
+                  </Link>
+                </>
+              )}
+
+              {!loading && user && (
+                <Link
+                  to="/"
+                  onClick={() => setIsOpen(false)}
+                  className="p-3 text-base border-3 border-perf-border rounded-xl text-center hover:bg-perf-text-muted/80 hover:text-white transition-all duration-300 cursor-pointer"
+                >
+                  Logout
+                </Link>
+              )}
             </div>
 
             {/* Small Real-World Luxury Footer Text */}

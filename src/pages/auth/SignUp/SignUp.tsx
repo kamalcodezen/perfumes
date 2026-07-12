@@ -191,7 +191,7 @@ const SignUp = () => {
         <p className="mt-6 text-center text-xs text-perf-text-muted">
           Already have an account?{" "}
           <Link
-            to="/auth/sign-in"
+            to="/auth/signin"
             className="font-semibold text-perf-gold hover:underline"
           >
             Sign In

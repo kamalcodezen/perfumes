@@ -6,9 +6,14 @@ import UseTheme from "../../../hooks/UseTheme";
 import MobileMenu from "./MobileMenu";
 import { navbarLinks } from "./navbarLinks";
 import NavLinks from "./navLinks";
+import { getUserSession } from "../../../lib/core/session";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+
+  const { user, loading } = getUserSession();
+  console.log(user);
 
   return (
     <nav className="fixed top-0 left-0 w-full z-[100] transition-all duration-300 bg-black/70 backdrop-blur-md py-3">
@@ -27,10 +32,10 @@ const Navbar = () => {
           {/* Mobile Title (Only visible on mobile) */}
           <div className="block md:hidden">
             <img
-            src={navLogo}
-            alt="The Perfume Spot"
-            className="w-48 sm:w-56 md:w-64 h-auto object-contain select-none drop-shadow-sm"
-          />
+              src={navLogo}
+              alt="The Perfume Spot"
+              className="w-48 sm:w-56 md:w-64 h-auto object-contain select-none drop-shadow-sm"
+            />
           </div>
 
           {/* Desktop Logo (Hidden on mobile) */}
@@ -52,6 +57,31 @@ const Navbar = () => {
             {/* Desktop Theme Toggle */}
             <div className="hidden md:flex">
               <UseTheme />
+              {loading && !user && (
+                <div className="ml-3 h-10 w-18 animate-pulse rounded-md  bg-muted" />
+              )}
+
+              {!loading && user && (
+                <>
+                  <Link
+                    to="/"
+                    className="p-2 px-3 text-base dark:text-black  text-white bg-perf-gold rounded-md ml-3 transition-all duration-300 cursor-pointer"
+                  >
+                    Logout
+                  </Link>
+                </>
+              )}
+
+              {!loading && !user && (
+                <>
+                  <Link
+                    to="/auth/signin"
+                    className="p-2 px-3 text-base dark:text-black text-white bg-perf-gold rounded-md ml-3 transition-all duration-300 cursor-pointer"
+                  >
+                    Login
+                  </Link>
+                </>
+              )}
             </div>
 
             {/* Mobile Menu Trigger Button */}

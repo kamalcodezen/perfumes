@@ -41,7 +41,7 @@ const SignIn = () => {
         console.error("Better Auth SignIn Error:", res.error);
       } else {
         toast.success("Signed in successfully");
-        navigate("/"); 
+        navigate("/");
       }
     } catch (error: any) {
       console.error("SignIn Exception Error:", error);
@@ -94,10 +94,7 @@ const SignIn = () => {
               <label className="text-xs font-semibold text-perf-text-main uppercase tracking-wider">
                 Password
               </label>
-              <Link
-                to="#"
-                className="text-xs text-perf-gold hover:underline"
-              >
+              <Link to="#" className="text-xs text-perf-gold hover:underline">
                 Forgot?
               </Link>
             </div>
