@@ -1,0 +1,9 @@
+const AddPerfume = () => {
+  return (
+    <section>
+      <h1 className="text-3xl font-bold text-perf-text-main">Add Perfume</h1>
+    </section>
+  );
+};
+
+export default AddPerfume;
