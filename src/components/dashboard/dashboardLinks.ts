@@ -1,8 +1,9 @@
 import {
+  Heart,
   LayoutDashboard,
-  User,
-  PlusCircle,
   Package,
+  PlusCircle,
+  User,
   Users,
 } from "lucide-react";
 
@@ -18,14 +19,9 @@ export const userNavLinks = [
     icon: User,
   },
   {
-    title: "Add Perfume",
-    path: "/dashboard/add-perfume",
-    icon: PlusCircle,
-  },
-  {
-    title: "My Perfumes",
-    path: "/dashboard/my-perfumes",
-    icon: Package,
+    title: "Wishlist",
+    path: "/dashboard/wishlist",
+    icon: Heart,
   },
 ];
 
@@ -39,6 +35,11 @@ export const adminNavLinks = [
     title: "Profile",
     path: "/dashboard/profile",
     icon: User,
+  },
+  {
+    title: "Add Perfume",
+    path: "/dashboard/add-perfume",
+    icon: PlusCircle,
   },
   {
     title: "Manage Perfumes",

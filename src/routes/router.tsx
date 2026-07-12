@@ -6,11 +6,8 @@ import SignUp from "../pages/auth/SignUp/SignUp";
 import SignIn from "../pages/auth/SignIn/SignIn";
 import AuthLayout from "../layout/AuthLayout";
 import DashboardLayout from "../layout/DashboardLayout";
-import DashboardHome from "../pages/dashboard/DashboardHome";
-import Profile from "../pages/dashboard/Profile";
-import AddPerfume from "../pages/dashboard/AddPerfume";
-import MyPerfumes from "../pages/dashboard/MyPerfumes";
-import ManagePerfumes from "../pages/dashboard/ManagePerfumes";
+import DashboardHome from "../pages/dashboard/shared/DashboardHome";
+import Profile from "../pages/dashboard/shared/Profile";
 
 export const router = createBrowserRouter([
   {
@@ -38,10 +35,12 @@ export const router = createBrowserRouter([
       },
     ],
   },
+  // Dashboard Routes
   {
-    path: "dashboard",
+    path: "/dashboard",
     element: <DashboardLayout />,
     children: [
+      // Shared
       {
         index: true,
         element: <DashboardHome />,
@@ -50,17 +49,25 @@ export const router = createBrowserRouter([
         path: "profile",
         element: <Profile />,
       },
+
+      // User
+      {
+        path: "wishlist",
+        element: <Wishlist />,
+      },
+
+      // Admin
       {
         path: "add-perfume",
         element: <AddPerfume />,
       },
       {
-        path: "my-perfumes",
-        element: <MyPerfumes />,
-      },
-      {
         path: "manage-perfumes",
         element: <ManagePerfumes />,
+      },
+      {
+        path: "manage-users",
+        element: <ManageUsers />,
       },
     ],
   },
