@@ -3,13 +3,16 @@ import UserProfileContent from "../../../components/dashboard/user/UserProfileCo
 import { getUserSession } from "../../../lib/core/session";
 
 const Profile = () => {
-  const { user } = getUserSession();
+  const session = getUserSession();
 
-  const currentUser = user as typeof user & {
-    role?: "user" | "admin";
-  };
+  interface ExtendedUser {
+    role?: string;
+  }
 
-  if (currentUser?.role === "admin") {
+  const user = session?.user as ExtendedUser | undefined;
+  const role = user?.role || "user";
+
+  if (role === "admin") {
     return <AdminProfileContent />;
   }
 
