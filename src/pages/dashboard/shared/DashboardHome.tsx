@@ -4,13 +4,16 @@ import UserDashboardContent from "../../../components/dashboard/user/UserDashboa
 import { getUserSession } from "../../../lib/core/session";
 
 const DashboardHome = () => {
-  const { user } = getUserSession();
+  const session = getUserSession();
 
-  const currentUser = user as typeof user & {
-    role?: "user" | "admin";
-  };
+  interface ExtendedUser {
+    role?: string;
+  }
 
-  return currentUser?.role === "admin" ? (
+  const user = session?.user as ExtendedUser | undefined;
+  const role = user?.role || "user";
+
+  return role === "admin" ? (
     <AdminDashboardContent />
   ) : (
     <UserDashboardContent />
