@@ -1,17 +1,10 @@
 export const baseUrl =
   import.meta.env.VITE_SERVER_URL || "http://localhost:5000";
 
-
-
-
-  
 export const serverFetch = async (path: string) => {
   const res = await fetch(`${baseUrl}${path}`);
   return res.json();
 };
-
-
-
 
 export const serverMutation = async (
   path: string,
