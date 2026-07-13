@@ -1,9 +1,9 @@
 import {
-  Heart,
   LayoutDashboard,
-  Package,
-  PlusCircle,
   User,
+  Heart,
+  PlusCircle,
+  Package,
   Users,
 } from "lucide-react";
 
@@ -53,6 +53,7 @@ export const adminNavLinks = [
   },
 ];
 
+// Combine into dashboardNavLinks export
 export const dashboardNavLinks = {
   user: userNavLinks,
   admin: adminNavLinks,
