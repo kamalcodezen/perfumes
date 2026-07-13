@@ -7,14 +7,15 @@ import {
   Image as ImageIcon,
   DollarSign,
   Tag,
-  Sparkles,
-  Droplets,
-  Layers,
   FileText,
   UploadCloud,
   Loader2,
   CheckCircle2,
+  Layers,
+  Sparkles,
+  UserCheck,
 } from "lucide-react";
+import { addPerfumes } from "../../../lib/actions/perfume";
 
 // ImgBB Upload Response Type
 interface ImgBBResponse {
@@ -26,19 +27,16 @@ interface ImgBBResponse {
   status: number;
 }
 
-// Form Data Interface based on Assignment Requirements
+// Form Interface
 interface PerfumeFormData {
   title: string;
-  brand: string;
   category: string;
+  gender: "Men" | "Women" | "Unisex"; // Men / Women Target
+  scentNotes: string;
   price: number;
-  volumeMl: number;
-  fragranceFamily: string;
-  topNotes: string;
   shortDescription: string;
   fullDescription: string;
   imageUrl?: string;
-  isFeatured?: boolean;
 }
 
 const AddPerfume = () => {
@@ -52,21 +50,27 @@ const AddPerfume = () => {
     register,
     handleSubmit,
     setValue,
+    watch,
     formState: { errors },
-  } = useForm<PerfumeFormData>();
+  } = useForm<PerfumeFormData>({
+    defaultValues: {
+      gender: "Men",
+    },
+  });
+
+  const selectedGender = watch("gender");
 
   // Image Upload Handler using ImgBB API
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Image preview
     const localPreview = URL.createObjectURL(file);
     setPreviewImage(localPreview);
 
     const apiKey = import.meta.env.VITE_IMGBB_API_KEY;
     if (!apiKey) {
-      toast.error("ImgBB API Key is missing in environment variables!");
+      toast.error("ImgBB API Key is missing!");
       return;
     }
 
@@ -85,13 +89,13 @@ const AddPerfume = () => {
       if (data.success) {
         setUploadedImageUrl(data.data.display_url);
         setValue("imageUrl", data.data.display_url);
-        toast.success("Image uploaded successfully to ImgBB!");
+        toast.success("Image uploaded successfully!");
       } else {
-        toast.error("Failed to upload image. Please try again.");
+        toast.error("Failed to upload image.");
       }
     } catch (error) {
       console.error("ImgBB Upload Error:", error);
-      toast.error("Error uploading image to ImgBB server.");
+      toast.error("Error uploading image.");
     } finally {
       setImageUploading(false);
     }
@@ -100,7 +104,7 @@ const AddPerfume = () => {
   // Submit Perfume Form to Backend API
   const onSubmit = async (data: PerfumeFormData) => {
     if (!uploadedImageUrl && !data.imageUrl) {
-      toast.error("Please upload or provide a valid perfume image!");
+      toast.error("Please upload an image!");
       return;
     }
 
@@ -108,66 +112,57 @@ const AddPerfume = () => {
       ...data,
       imageUrl: uploadedImageUrl || data.imageUrl,
       price: Number(data.price),
-      volumeMl: Number(data.volumeMl),
-      createdAt: new Date().toISOString(),
     };
 
     try {
       setIsSubmitting(true);
 
-      // Replace this URL with your Express / Backend API endpoint
-     
+      const response = await addPerfumes(finalData);
 
-      if (!response.ok) {
-        throw new Error("Failed to add new perfume product");
+      // MongoDB Acknowledged Response Check
+      if (response && response.acknowledged) {
+        toast.success("Perfume added successfully!");
+        navigate("/dashboard/add-perfumes");
+      } else {
+        throw new Error("Failed to save product in database.");
       }
-
-      toast.success("Perfume added to RossWell collection successfully!");
-      navigate("/add-perfume"); // Redirects to Manage Items page as per Assignment requirement
     } catch (error: any) {
       console.error(error);
-      toast.error(
-        error.message || "Something went wrong while adding product.",
-      );
+      toast.error(error.message || "Something went wrong.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <section className="min-h-screen bg-perf-bg max-w-11/12 mx-auto flex justify-center items-center">
-      <div className="w-full mx-auto max-w-4xl bg-perf-card border border-perf-border/80 rounded-3xl p-6 sm:p-10 shadow-xl">
-      
-        {/* Page Header */}
+    <section className="min-h-screen bg-perf-bg w-full flex items-center justify-center p-4 sm:p-6 lg:p-8">
+      <div className="w-full mt-12 lg:mt-0 max-w-7xl bg-perf-card border border-perf-border/80  p-6 sm:p-10 shadow-xl">
+        {/* Header */}
         <div className="text-center mb-10">
-          <span className="uppercase tracking-[0.35em] text-perf-gold text-xs sm:text-sm font-semibold">
-            RossWell Exclusive Admin
+          <span className="uppercase tracking-[0.3em] text-perf-gold text-xs font-semibold">
+            RossWell Boutique
           </span>
-          <h1 className="mt-2 text-3xl sm:text-4xl font-bold font-serif-luxury text-perf-text-main">
-            Add New Fragrance Product
+          <h1 className="mt-1 text-2xl sm:text-3xl font-bold font-serif-luxury text-perf-text-main">
+            Add New Fragrance Item
           </h1>
-          <p className="mt-2 text-sm text-perf-text-muted max-w-lg mx-auto">
-            Fill in the details below to add a luxury fragrance item to your
-            inventory listing.
+          <p className="mt-1 text-xs sm:text-sm text-perf-text-muted">
+            Enter item details to publish in the store collection
           </p>
         </div>
 
-        {/* Product Form */}
+        {/* Form */}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          {/* Section 1: Basic Information */}
+          {/* Row 1: Title & Gender Selection (Men / Women) */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Perfume Name */}
-            <div className="space-y-2">
+            {/* Title */}
+            <div className="space-y-1.5">
               <label className="text-xs font-semibold uppercase tracking-wider text-perf-text-main flex items-center gap-1.5">
-                <Tag size={14} className="text-perf-gold" /> Perfume Title /
-                Name
+                <Tag size={14} className="text-perf-gold" /> Perfume Title
               </label>
               <input
-                {...register("title", {
-                  required: "Perfume title is required",
-                })}
+                {...register("title", { required: "Title is required" })}
                 type="text"
-                placeholder="e.g., Imperial Amber Oud"
+                placeholder="e.g., Royal Oud Supreme"
                 className="w-full bg-perf-input-bg border border-perf-border rounded-xl px-4 py-3 text-sm text-perf-text-main outline-none focus:border-perf-gold transition"
               />
               {errors.title && (
@@ -177,30 +172,94 @@ const AddPerfume = () => {
               )}
             </div>
 
-            {/* Brand */}
-            <div className="space-y-2">
+            {/* Target Audience: Men / Women Option Buttons */}
+            <div className="space-y-1.5">
               <label className="text-xs font-semibold uppercase tracking-wider text-perf-text-main flex items-center gap-1.5">
-                <Sparkles size={14} className="text-perf-gold" /> Brand /
-                Collection
+                <UserCheck size={14} className="text-perf-gold" /> Target Gender
               </label>
-              <input
-                {...register("brand", { required: "Brand name is required" })}
-                type="text"
-                placeholder="e.g., RossWell Elixir"
-                className="w-full bg-perf-input-bg border border-perf-border rounded-xl px-4 py-3 text-sm text-perf-text-main outline-none focus:border-perf-gold transition"
-              />
-              {errors.brand && (
-                <span className="text-xs text-red-500">
-                  {errors.brand.message}
-                </span>
-              )}
+
+              <div className="grid grid-cols-3 gap-3 pt-0.5">
+                {/* Men Option */}
+                <label
+                  className={`flex items-center justify-center gap-2 py-3 px-4 rounded-xl border cursor-pointer transition-all text-xs font-bold uppercase tracking-wider ${
+                    selectedGender === "Men"
+                      ? "bg-perf-gold/20 border-perf-gold text-perf-gold shadow-sm"
+                      : "bg-perf-input-bg border-perf-border text-perf-text-muted hover:border-perf-gold/50"
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    value="Men"
+                    {...register("gender", { required: true })}
+                    className="hidden"
+                  />
+                  <span>Men</span>
+                </label>
+
+                {/* Women Option */}
+                <label
+                  className={`flex items-center justify-center gap-2 py-3 px-4 rounded-xl border cursor-pointer transition-all text-xs font-bold uppercase tracking-wider ${
+                    selectedGender === "Women"
+                      ? "bg-perf-gold/20 border-perf-gold text-perf-gold shadow-sm"
+                      : "bg-perf-input-bg border-perf-border text-perf-text-muted hover:border-perf-gold/50"
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    value="Women"
+                    {...register("gender", { required: true })}
+                    className="hidden"
+                  />
+                  <span>Women</span>
+                </label>
+
+                {/* Unisex Option */}
+                <label
+                  className={`flex items-center justify-center gap-2 py-3 px-4 rounded-xl border cursor-pointer transition-all text-xs font-bold uppercase tracking-wider ${
+                    selectedGender === "Unisex"
+                      ? "bg-perf-gold/20 border-perf-gold text-perf-gold shadow-sm"
+                      : "bg-perf-input-bg border-perf-border text-perf-text-muted hover:border-perf-gold/50"
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    value="Unisex"
+                    {...register("gender", { required: true })}
+                    className="hidden"
+                  />
+                  <span>Unisex</span>
+                </label>
+              </div>
             </div>
           </div>
 
-          {/* Section 2: Pricing, Category & Size */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          {/* Row 2: Concentration Category & Price */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Perfume Category */}
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold uppercase tracking-wider text-perf-text-main flex items-center gap-1.5">
+                <Layers size={14} className="text-perf-gold" /> Concentration
+                Category
+              </label>
+              <select
+                {...register("category", { required: "Category is required" })}
+                className="w-full bg-perf-input-bg border border-perf-border rounded-xl px-4 py-3 text-sm text-perf-text-main outline-none focus:border-perf-gold transition cursor-pointer"
+              >
+                <option value="">Select Concentration</option>
+                <option value="Eau de Parfum">Eau de Parfum (EDP)</option>
+                <option value="Extrait de Parfum">Extrait de Parfum</option>
+                <option value="Eau de Toilette">Eau de Toilette (EDT)</option>
+                <option value="Pure Attar">Pure Attar Oil</option>
+              </select>
+              {errors.category && (
+                <span className="text-xs text-red-500">
+                  {errors.category.message}
+                </span>
+              )}
+            </div>
+
             {/* Price */}
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <label className="text-xs font-semibold uppercase tracking-wider text-perf-text-main flex items-center gap-1.5">
                 <DollarSign size={14} className="text-perf-gold" /> Price ($
                 USD)
@@ -221,115 +280,94 @@ const AddPerfume = () => {
                 </span>
               )}
             </div>
-
-            {/* Volume (ml) */}
-            <div className="space-y-2">
-              <label className="text-xs font-semibold uppercase tracking-wider text-perf-text-main flex items-center gap-1.5">
-                <Droplets size={14} className="text-perf-gold" /> Volume (ml)
-              </label>
-              <input
-                {...register("volumeMl", {
-                  required: "Volume size is required",
-                })}
-                type="number"
-                placeholder="100"
-                className="w-full bg-perf-input-bg border border-perf-border rounded-xl px-4 py-3 text-sm text-perf-text-main outline-none focus:border-perf-gold transition"
-              />
-              {errors.volumeMl && (
-                <span className="text-xs text-red-500">
-                  {errors.volumeMl.message}
-                </span>
-              )}
-            </div>
-
-            {/* Category */}
-            <div className="space-y-2">
-              <label className="text-xs font-semibold uppercase tracking-wider text-perf-text-main flex items-center gap-1.5">
-                <Layers size={14} className="text-perf-gold" /> Category
-              </label>
-              <select
-                {...register("category", { required: "Category is required" })}
-                className="w-full bg-perf-input-bg border border-perf-border rounded-xl px-4 py-3 text-sm text-perf-text-main outline-none focus:border-perf-gold transition cursor-pointer"
-              >
-                <option value="">Select Category</option>
-                <option value="Eau de Parfum">Eau de Parfum (EDP)</option>
-                <option value="Extrait de Parfum">Extrait de Parfum</option>
-                <option value="Eau de Toilette">Eau de Toilette (EDT)</option>
-                <option value="Attar Oil">Pure Attar Oil</option>
-              </select>
-              {errors.category && (
-                <span className="text-xs text-red-500">
-                  {errors.category.message}
-                </span>
-              )}
-            </div>
           </div>
 
-          {/* Section 3: Fragrance Notes & Family */}
+          {/* Row 3: Scent Notes & Short Description */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Fragrance Family */}
-            <div className="space-y-2">
-              <label className="text-xs font-semibold uppercase tracking-wider text-perf-text-main">
-                Fragrance Family
+            {/* Fragrance Family / Scent Notes */}
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold uppercase tracking-wider text-perf-text-main flex items-center gap-1.5">
+                <Sparkles size={14} className="text-perf-gold" /> Scent Profile
+                / Family
               </label>
               <input
-                {...register("fragranceFamily")}
+                {...register("scentNotes")}
                 type="text"
-                placeholder="e.g., Oriental Woody / Floral Amber"
+                placeholder="e.g., Oriental Woody, Amber, Saffron"
                 className="w-full bg-perf-input-bg border border-perf-border rounded-xl px-4 py-3 text-sm text-perf-text-main outline-none focus:border-perf-gold transition"
               />
             </div>
 
-            {/* Top Notes */}
-            <div className="space-y-2">
-              <label className="text-xs font-semibold uppercase tracking-wider text-perf-text-main">
-                Key Notes
+            {/* Short Description */}
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold uppercase tracking-wider text-perf-text-main flex items-center gap-1.5">
+                <FileText size={14} className="text-perf-gold" /> Short Summary
               </label>
               <input
-                {...register("topNotes")}
+                {...register("shortDescription", {
+                  required: "Short description is required",
+                })}
                 type="text"
-                placeholder="e.g., Bergamot, Oud Wood, Saffron, Vanilla"
+                placeholder="Brief 1-line fragrance summary..."
                 className="w-full bg-perf-input-bg border border-perf-border rounded-xl px-4 py-3 text-sm text-perf-text-main outline-none focus:border-perf-gold transition"
               />
+              {errors.shortDescription && (
+                <span className="text-xs text-red-500">
+                  {errors.shortDescription.message}
+                </span>
+              )}
             </div>
           </div>
 
-          {/* Section 4: Image Upload (ImgBB Integration) */}
-          <div className="space-y-2">
+          {/* Row 4: Full Description */}
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold uppercase tracking-wider text-perf-text-main">
+              Full Scent Overview
+            </label>
+            <textarea
+              {...register("fullDescription", {
+                required: "Full description is required",
+              })}
+              rows={4}
+              placeholder="Elaborate scent story, longevity, and detailed notes..."
+              className="w-full bg-perf-input-bg border border-perf-border rounded-xl px-4 py-3 text-sm text-perf-text-main outline-none focus:border-perf-gold transition resize-none"
+            ></textarea>
+            {errors.fullDescription && (
+              <span className="text-xs text-red-500">
+                {errors.fullDescription.message}
+              </span>
+            )}
+          </div>
+
+          {/* Row 5: Image Upload (ImgBB Integration) */}
+          <div className="space-y-1.5">
             <label className="text-xs font-semibold uppercase tracking-wider text-perf-text-main flex items-center gap-1.5">
               <ImageIcon size={14} className="text-perf-gold" /> Product Image
-              (ImgBB Upload)
+              Upload
             </label>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-center">
-              {/* File Dropzone */}
-              <label className="sm:col-span-2 flex flex-col items-center justify-center border-2 border-dashed border-perf-border hover:border-perf-gold rounded-2xl p-5 bg-perf-input-bg cursor-pointer transition text-center group">
+              <label className="sm:col-span-2 flex flex-col items-center justify-center border-2 border-dashed border-perf-border hover:border-perf-gold rounded-xl p-5 bg-perf-input-bg cursor-pointer transition text-center group">
                 {imageUploading ? (
-                  <div className="flex flex-col items-center py-2">
+                  <div className="flex flex-col items-center py-1">
                     <Loader2
-                      size={32}
-                      className="animate-spin text-perf-gold mb-2"
+                      size={24}
+                      className="animate-spin text-perf-gold mb-1"
                     />
                     <span className="text-xs text-perf-text-muted">
                       Uploading to ImgBB...
                     </span>
                   </div>
                 ) : uploadedImageUrl ? (
-                  <div className="flex items-center gap-2 text-green-600 font-semibold text-xs py-2">
-                    <CheckCircle2 size={20} />
-                    <span>Image Uploaded Successfully!</span>
+                  <div className="flex items-center gap-2 text-green-600 font-semibold text-xs py-1">
+                    <CheckCircle2 size={18} />
+                    <span>Uploaded Successfully</span>
                   </div>
                 ) : (
                   <div className="flex flex-col items-center">
-                    <UploadCloud
-                      size={32}
-                      className="text-perf-gold group-hover:scale-110 transition-transform mb-2"
-                    />
+                    <UploadCloud size={24} className="text-perf-gold mb-1" />
                     <span className="text-xs font-semibold text-perf-text-main">
-                      Click to upload perfume photo
-                    </span>
-                    <span className="text-[11px] text-perf-text-muted mt-0.5">
-                      JPG, PNG, WEBP up to 5MB
+                      Upload perfume photo
                     </span>
                   </div>
                 )}
@@ -341,96 +379,36 @@ const AddPerfume = () => {
                 />
               </label>
 
-              {/* Image Preview Box */}
-              <div className="h-32 border border-perf-border rounded-2xl bg-perf-input-bg flex items-center justify-center overflow-hidden">
+              <div className="h-28 border border-perf-border rounded-xl bg-perf-input-bg flex items-center justify-center overflow-hidden">
                 {previewImage || uploadedImageUrl ? (
                   <img
                     src={previewImage || uploadedImageUrl}
-                    alt="Perfume Preview"
+                    alt="Preview"
                     className="h-full w-full object-cover"
                   />
                 ) : (
-                  <span className="text-xs text-perf-text-muted">
-                    No Image Selected
-                  </span>
+                  <span className="text-xs text-perf-text-muted">No Image</span>
                 )}
               </div>
             </div>
           </div>
 
-          {/* Section 5: Descriptions */}
-          {/* Short Description */}
-          <div className="space-y-2">
-            <label className="text-xs font-semibold uppercase tracking-wider text-perf-text-main flex items-center gap-1.5">
-              <FileText size={14} className="text-perf-gold" /> Short Summary
-            </label>
-            <input
-              {...register("shortDescription", {
-                required: "Short summary is required",
-              })}
-              type="text"
-              placeholder="Brief 1-line fragrance highlight for product card..."
-              className="w-full bg-perf-input-bg border border-perf-border rounded-xl px-4 py-3 text-sm text-perf-text-main outline-none focus:border-perf-gold transition"
-            />
-            {errors.shortDescription && (
-              <span className="text-xs text-red-500">
-                {errors.shortDescription.message}
-              </span>
-            )}
-          </div>
-
-          {/* Full Description */}
-          <div className="space-y-2">
-            <label className="text-xs font-semibold uppercase tracking-wider text-perf-text-main">
-              Detailed Overview & Scent Story
-            </label>
-            <textarea
-              {...register("fullDescription", {
-                required: "Full description is required",
-              })}
-              rows={4}
-              placeholder="Elaborate scent profile, longevity, occasion, and crafted notes..."
-              className="w-full bg-perf-input-bg border border-perf-border rounded-xl px-4 py-3 text-sm text-perf-text-main outline-none focus:border-perf-gold transition resize-none"
-            ></textarea>
-            {errors.fullDescription && (
-              <span className="text-xs text-red-500">
-                {errors.fullDescription.message}
-              </span>
-            )}
-          </div>
-
-          {/* Featured Checkbox */}
-          <div className="flex items-center gap-2 pt-2">
-            <input
-              {...register("isFeatured")}
-              type="checkbox"
-              id="isFeatured"
-              className="h-4 w-4 rounded border-perf-border text-perf-gold focus:ring-perf-gold accent-perf-gold cursor-pointer"
-            />
-            <label
-              htmlFor="isFeatured"
-              className="text-xs font-semibold uppercase text-perf-text-main cursor-pointer"
-            >
-              Mark as Featured Collection on Landing Page
-            </label>
-          </div>
-
           {/* Submit Button */}
-          <div className="pt-4">
+          <div className="pt-2">
             <button
               type="submit"
               disabled={isSubmitting || imageUploading}
-              className="w-full flex items-center justify-center gap-2 bg-perf-gold hover:opacity-90 text-white font-semibold py-4 px-6 rounded-xl transition duration-300 shadow-md disabled:opacity-60 cursor-pointer"
+              className="w-full flex items-center justify-center gap-2 bg-perf-gold hover:opacity-90 text-white font-semibold py-3.5 px-6 rounded-xl transition duration-300 shadow-md disabled:opacity-60 cursor-pointer text-sm"
             >
               {isSubmitting ? (
                 <>
                   <Loader2 size={18} className="animate-spin" />
-                  <span>Adding Perfume...</span>
+                  <span>Publishing...</span>
                 </>
               ) : (
                 <>
                   <PackagePlus size={18} />
-                  <span>Publish Fragrance To Store</span>
+                  <span>Publish Perfume To Store</span>
                 </>
               )}
             </button>
