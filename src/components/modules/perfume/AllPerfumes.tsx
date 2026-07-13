@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Sparkles } from "lucide-react";
+import { Loader2, Sparkles } from "lucide-react";
 
 import { getPerfumes } from "../../../lib/api/perfume";
 import PerfumeFilter from "./PerfumeFilter";
@@ -28,6 +28,7 @@ const AllPerfumes = () => {
   useEffect(() => {
     const loadPerfumes = async () => {
       try {
+        setLoading(true);
         const data = await getPerfumes();
         setPerfumes(data);
       } catch (error) {
@@ -106,8 +107,11 @@ const AllPerfumes = () => {
 
   if (loading) {
     return (
-      <div className="py-24 text-center text-perf-text-muted">
-        Loading perfumes...
+      <div className="min-h-screen bg-perf-bg flex flex-col items-center justify-center gap-3">
+        <Loader2 size={36} className="animate-spin text-perf-gold" />
+        <p className="text-xs font-semibold tracking-widest uppercase text-perf-text-muted">
+          Unveiling Fragrance...
+        </p>
       </div>
     );
   }
