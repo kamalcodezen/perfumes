@@ -116,14 +116,7 @@ const AddPerfume = () => {
       setIsSubmitting(true);
 
       // Replace this URL with your Express / Backend API endpoint
-      const response = await fetch("http://localhost:5000/api/perfumes", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          // authorization: `Bearer ${token}` -> add your auth header here
-        },
-        body: JSON.stringify(finalData),
-      });
+     
 
       if (!response.ok) {
         throw new Error("Failed to add new perfume product");
@@ -142,8 +135,8 @@ const AddPerfume = () => {
   };
 
   return (
-    <section className="min-h-screen bg-perf-bg py-12 px-4 sm:px-6 lg:px-8 flex justify-center items-center">
-      <div className="w-full max-w-4xl bg-perf-card border border-perf-border/80 rounded-3xl p-6 sm:p-10 shadow-xl">
+    <section className="min-h-screen bg-perf-bg max-w-11/12 mx-auto flex justify-center items-center">
+      <div className="w-full mx-auto max-w-4xl bg-perf-card border border-perf-border/80 rounded-3xl p-6 sm:p-10 shadow-xl">
       
         {/* Page Header */}
         <div className="text-center mb-10">

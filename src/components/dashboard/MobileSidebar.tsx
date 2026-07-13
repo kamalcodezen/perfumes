@@ -115,9 +115,6 @@ const MobileSidebar = () => {
 
         {/* Navigation Scroll Area */}
         <div className="flex-1 overflow-y-auto px-4 py-5 space-y-1.5 scrollbar-thin scrollbar-thumb-perf-border">
-          <p className="px-3 pb-2 text-[10px] font-bold uppercase tracking-[0.2em] text-perf-text-muted/70">
-            Navigation
-          </p>
 
           {menus.map((item) => {
             const Icon = item.icon;
