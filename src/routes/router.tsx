@@ -8,6 +8,7 @@ import AuthLayout from "../layout/AuthLayout";
 import DashboardLayout from "../layout/DashboardLayout";
 import DashboardHome from "../pages/dashboard/shared/DashboardHome";
 import Profile from "../pages/dashboard/shared/Profile";
+import AddPerfume from "../pages/dashboard/admin/AddPerfume";
 
 export const router = createBrowserRouter([
   {
@@ -57,10 +58,10 @@ export const router = createBrowserRouter([
       // },
 
       // Admin
-      // {
-      //   path: "add-perfume",
-      //   element: <AddPerfume />,
-      // },
+      {
+        path: "add-perfume",
+        element: <AddPerfume />,
+      },
       // {
       //   path: "manage-perfumes",
       //   element: <ManagePerfumes />,
