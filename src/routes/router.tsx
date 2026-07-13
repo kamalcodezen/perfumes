@@ -10,6 +10,7 @@ import DashboardHome from "../pages/dashboard/shared/DashboardHome";
 import Profile from "../pages/dashboard/shared/Profile";
 import AddPerfume from "../pages/dashboard/admin/AddPerfume";
 import Perfumes from "../pages/Perfumes/Perfumes";
+import PerfumeDetails from "../pages/Perfumes/PerfumeDetails";
 
 export const router = createBrowserRouter([
   {
@@ -25,11 +26,18 @@ export const router = createBrowserRouter([
         path: "all-perfumes",
         element: <Perfumes />,
       },
+      {
+        path: "perfumes/:id",
+        element: <PerfumeDetails />,
+      },
     ],
   },
+
+  // Auth Routes
   {
     path: "auth",
     element: <AuthLayout />,
+    errorElement: <ErrorPage />,
     children: [
       {
         path: "signup",
@@ -41,10 +49,12 @@ export const router = createBrowserRouter([
       },
     ],
   },
+
   // Dashboard Routes
   {
-    path: "/dashboard",
+    path: "dashboard",
     element: <DashboardLayout />,
+    errorElement: <ErrorPage />,
     children: [
       // Shared
       {
@@ -76,5 +86,11 @@ export const router = createBrowserRouter([
       //   element: <ManageUsers />,
       // },
     ],
+  },
+
+  // Catch-all route for invalid URLs (404 Page)
+  {
+    path: "*",
+    element: <ErrorPage />,
   },
 ]);
