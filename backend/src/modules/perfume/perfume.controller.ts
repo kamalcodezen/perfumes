@@ -71,3 +71,24 @@ export const getPerfumeById = async (
     });
   }
 };
+
+export const deletePerfume = async (
+  req: Request<{ id: string }>,
+  res: Response,
+) => {
+  try {
+    const { id } = req.params;
+
+    const result = await perfumeCollection.deleteOne({
+      _id: new ObjectId(id),
+    });
+
+    res.json(result);
+  } catch (error: any) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to delete perfume",
+    });
+  }
+};
