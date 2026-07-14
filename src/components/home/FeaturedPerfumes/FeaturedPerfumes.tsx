@@ -4,6 +4,7 @@ import { getPerfumes } from "../../../lib/api/perfume";
 
 import { Sparkles, Loader2, ArrowRight } from "lucide-react";
 import PerfumeCard from "../../shared/PerfumeCard";
+import PerfumeCardSkeleton from "../../shared/PerfumeCardSkeleton";
 
 // Perfume Data Interface
 export interface Perfume {
@@ -71,12 +72,17 @@ const FeaturedPerfumes = () => {
 
         {/* Loading State */}
         {loading ? (
-          <div className="flex flex-col items-center justify-center py-20 gap-3">
-            <Loader2 size={36} className="animate-spin text-perf-gold" />
-            <p className="text-xs font-semibold tracking-widest uppercase text-perf-text-muted">
-              Loading Collection...
-            </p>
-          </div>
+          <>
+            <div className="mt-6 mb-5 text-xs font-semibold uppercase tracking-wider text-perf-text-muted">
+              Loading perfumes...
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {Array.from({ length: 8 }).map((_, index) => (
+                <PerfumeCardSkeleton key={index} />
+              ))}
+            </div>
+          </>
         ) : perfumes.length === 0 ? (
           /* Empty State */
           <div className="text-center py-16 bg-perf-card/40 rounded-3xl border border-perf-border/60">
