@@ -17,6 +17,10 @@ export const navbarLinks: NavLinkItem[] = [
     label: "About",
   },
   {
+    path: "/contact",
+    label: "Contact",
+  },
+  {
     path: "/dashboard",
     label: "Dashboard",
   },

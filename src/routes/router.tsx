@@ -13,6 +13,7 @@ import Perfumes from "../pages/Perfumes/Perfumes";
 import PerfumeDetails from "../pages/Perfumes/PerfumeDetails";
 import About from "../pages/About/About";
 import ManagePerfumes from "../pages/dashboard/admin/ManagePerfumes";
+import ContactPage from "../pages/Contact/ContactPage";
 
 export const router = createBrowserRouter([
   {
@@ -35,6 +36,10 @@ export const router = createBrowserRouter([
       {
         path: "about",
         element: <About />,
+      },
+      {
+        path: "contact",
+        element: <ContactPage />,
       },
     ],
   },
