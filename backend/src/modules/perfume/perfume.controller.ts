@@ -28,11 +28,33 @@ export const addPerfumes = async (req: Request, res: Response) => {
   }
 };
 
-// all perfumes get
+// all perfumes get (with Pagination/Infinite Scroll support)
 export const getPerfumes = async (req: Request, res: Response) => {
   try {
-    const result = await perfumeCollection.find().toArray();
-    res.json(result);
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 8;
+
+    // Calculate items to skip
+    const skip = (page - 1) * limit;
+
+    // Fetch paginated data from MongoDB
+    const result = await perfumeCollection
+      .find()
+      .skip(skip)
+      .limit(limit)
+      .toArray();
+
+    // Get total document count
+    const totalPerfumes = await perfumeCollection.countDocuments();
+    const totalPages = Math.ceil(totalPerfumes / limit);
+
+    res.json({
+      success: true,
+      data: result,
+      currentPage: page,
+      totalPages: totalPages,
+      nextPage: page < totalPages ? page + 1 : null,
+    });
   } catch (error: any) {
     console.error(error);
     res.status(500).json({
@@ -72,6 +94,7 @@ export const getPerfumeById = async (
   }
 };
 
+// delete perfume by id
 export const deletePerfume = async (
   req: Request<{ id: string }>,
   res: Response,
