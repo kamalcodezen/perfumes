@@ -24,6 +24,23 @@ const SignIn = () => {
     }));
   };
 
+  // ----------------------------------------------------
+  // Step 1: Demo Credentials Auto-Fill Handlers
+  // ----------------------------------------------------
+  const handleDemoUser = () => {
+    setFormData({
+      email: "user@gmail.com",
+      password: "1234Abcd",
+    });
+  };
+
+  const handleDemoAdmin = () => {
+    setFormData({
+      email: "admin@gmail.com",
+      password: "1234Abcd",
+    });
+  };
+
   // Handle Form Submission with Better Auth
   const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -37,14 +54,14 @@ const SignIn = () => {
       });
 
       if (res.error) {
-        toast.error(res.error.message || "Invalid email or password");
+        // toast.error(res.error.message || "Invalid email or password");
         console.error("Better Auth SignIn Error:", res.error);
       } else {
         toast.success("Signed in successfully");
         navigate("/");
       }
     } catch (error: any) {
-      console.error("SignIn Exception Error:", error);
+      // console.error("SignIn Exception Error:", error);
       toast.error(
         error?.message ||
           "Server connection failed. Please check your backend.",
@@ -112,7 +129,7 @@ const SignIn = () => {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="text-perf-text-muted hover:text-perf-text-main transition ml-2"
+                className="text-perf-text-muted hover:text-perf-text-main transition ml-2 cursor-pointer"
               >
                 {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
@@ -127,10 +144,36 @@ const SignIn = () => {
           >
             {loading ? "Signing In..." : "Sign In"}
           </button>
+
+          {/* ---------------------------------------------------- */}
+          {/* Step 2: Demo Login Buttons & Note                    */}
+          {/* ---------------------------------------------------- */}
+          <div className="pt-2">
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                type="button"
+                onClick={handleDemoUser}
+                className="rounded-lg border border-perf-border bg-perf-input-bg py-2.5 text-xs font-semibold text-perf-text-main hover:border-perf-gold hover:text-perf-gold transition cursor-pointer"
+              >
+                Demo User
+              </button>
+
+              <button
+                type="button"
+                onClick={handleDemoAdmin}
+                className="rounded-lg border border-perf-border bg-perf-input-bg py-2.5 text-xs font-semibold text-perf-text-main hover:border-perf-gold hover:text-perf-gold transition cursor-pointer"
+              >
+                Demo Admin
+              </button>
+            </div>
+            <p className="text-center text-[13px] text-perf-text-muted mt-2.5">
+              Click a demo button to auto-fill login credentials.
+            </p>
+          </div>
         </form>
 
         {/* Footer */}
-        <p className="mt-6 text-center text-xs text-perf-text-muted">
+        <p className="mt-6 text-center text-sm text-perf-text-muted">
           Don't have an account?{" "}
           <Link
             to="/auth/signup"
