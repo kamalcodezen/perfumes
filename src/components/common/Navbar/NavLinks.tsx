@@ -15,8 +15,8 @@ const NavLinks = ({ to, children, onClick }: NavLinksProps) => {
         `text-base font-medium transition-colors duration-300 px-3 py-2 rounded-md select-none
         ${
           isActive
-            ? "text-[var(--perf-gold)] font-semibold underline decoration-2 underline-offset-8"
-            : "text-[var(--perf-text-muted)] hover:text-[var(--perf-text-main)]"
+            ? "text-perf-gold font-semibold underline decoration-2 underline-offset-8"
+            : "text-perf-gold hover:text-[var(--perf-text-main)]"
         }`
       }
     >

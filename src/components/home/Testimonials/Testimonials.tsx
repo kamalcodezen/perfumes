@@ -5,7 +5,7 @@ import { testimonialsData } from "./testimonialsData";
 const Testimonials = () => {
   return (
     <section className="py-20">
-      <div className="mx-auto max-w-11/12 px-6">
+      <div className="mx-auto max-w-11/12">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}

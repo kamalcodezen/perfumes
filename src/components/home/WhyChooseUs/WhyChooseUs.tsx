@@ -17,7 +17,7 @@ const WhyChooseUs = () => {
 
   return (
     <section className="py-24 relative bg-perf-bg overflow-hidden">
-      <div className="mx-auto max-w-7xl px-6">
+      <div className="mx-auto max-w-11/12 ">
         {/* Header Section */}
         {/* <div data-aos="fade-up" className="mb-20 text-center">
           <p className="uppercase tracking-[0.3em] text-perf-gold text-sm font-semibold">

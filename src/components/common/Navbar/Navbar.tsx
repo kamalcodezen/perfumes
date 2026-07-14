@@ -32,16 +32,16 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="fixed top-0 left-0 w-full z-[100] transition-all duration-300 bg-black/70 backdrop-blur-md py-3">
+    <nav className="fixed top-0 left-0 w-full z-[100] transition-all duration-300 bg-black/90 backdrop-blur py-3">
       <div className="max-w-11/12 mx-auto flex flex-col gap-3">
-        {/* 1. Desktop Only Top Title (Logo Image Alignment Fixed) */}
+        {/* 1. Desktop Only Top Title (Logo Image Alignment Fixed)
         <div className="hidden md:flex justify-center items-center">
           <img
             src={navLogo}
             alt="The Perfume Spot"
             className="w-48 sm:w-56 md:w-64 h-auto object-contain select-none drop-shadow-sm"
           />
-        </div>
+        </div> */}
 
         {/* 2. Main Navbar Row */}
         <section className="w-full flex justify-between items-center">
