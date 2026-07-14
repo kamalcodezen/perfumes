@@ -10,7 +10,7 @@ interface CollectionCardProps {
 const CollectionCard = ({ collection }: CollectionCardProps) => {
   return (
     <motion.div
-      whileHover={{ y: -8 }}
+      // whileHover={{ y: -8 }}
       className="relative overflow-hidden cursor-pointer"
     >
       {/* Background Image */}
@@ -37,7 +37,7 @@ const CollectionCard = ({ collection }: CollectionCardProps) => {
             {/* Initial White Background (Only slides when hovering DIRECTLY on button) */}
             <span
               className="
-                absolute inset-0 bg-white
+                absolute inset-0 bg-perf-gold
                 translate-x-0 group-hover/btn:translate-x-full
                 transition-transform duration-500 ease-in-out z-0
               "
