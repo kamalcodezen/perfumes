@@ -1,3 +1,4 @@
+import FeaturedPerfumes from "../../components/home/FeaturedPerfumes/FeaturedPerfumes";
 import HeroCarousel from "../../components/home/Hero/HeroCarousel";
 import Newsletter from "../../components/home/Newsletter/Newsletter";
 import ShopCollections from "../../components/home/ShopCollections/ShopCollections";
@@ -9,7 +10,7 @@ const HomePage = () => {
     <>
       <HeroCarousel />
       <ShopCollections />
-      {/* <WhyChooseUs /> */}
+      <FeaturedPerfumes />
       <WhyChooseUs />
       <Testimonials />
       <Newsletter />
