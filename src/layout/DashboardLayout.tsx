@@ -7,7 +7,7 @@ const DashboardLayout = () => {
       <DashboardSidebar />
 
       {/* page content */}
-      <main className="min-h-screen max-w-full mx-auto">
+      <main className="min-h-screen w-full mx-auto">
         <Outlet />
       </main>
     </div>

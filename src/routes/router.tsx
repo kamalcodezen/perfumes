@@ -11,6 +11,8 @@ import Profile from "../pages/dashboard/shared/Profile";
 import AddPerfume from "../pages/dashboard/admin/AddPerfume";
 import Perfumes from "../pages/Perfumes/Perfumes";
 import PerfumeDetails from "../pages/Perfumes/PerfumeDetails";
+import About from "../pages/About/About";
+import ManagePerfumes from "../pages/dashboard/admin/ManagePerfumes";
 
 export const router = createBrowserRouter([
   {
@@ -29,6 +31,10 @@ export const router = createBrowserRouter([
       {
         path: "perfumes/:id",
         element: <PerfumeDetails />,
+      },
+      {
+        path: "about",
+        element: <About />,
       },
     ],
   },
@@ -77,10 +83,10 @@ export const router = createBrowserRouter([
         path: "add-perfume",
         element: <AddPerfume />,
       },
-      // {
-      //   path: "manage-perfumes",
-      //   element: <ManagePerfumes />,
-      // },
+      {
+        path: "manage-perfumes",
+        element: <ManagePerfumes />,
+      },
       // {
       //   path: "manage-users",
       //   element: <ManageUsers />,
