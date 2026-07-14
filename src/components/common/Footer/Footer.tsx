@@ -1,17 +1,31 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Send, MapPin, Phone } from "lucide-react";
+import { Send, MapPin, Phone, Mail, CheckCircle2 } from "lucide-react";
+import { FaLinkedinIn, FaGithub } from "react-icons/fa6";
 import { motion } from "framer-motion";
 
 export default function Footer() {
+  const [email, setEmail] = useState("");
+  const [isSubscribed, setIsSubscribed] = useState(false);
+
+  const handleSubscribe = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (email.trim()) {
+      setIsSubscribed(true);
+      setEmail("");
+      setTimeout(() => setIsSubscribed(false), 4000);
+    }
+  };
+
   return (
-    <footer className="relative w-full overflow-hidden pt-16">
+    <footer className="relative w-full overflow-hidden pt-16 bg-perf-card text-perf-text-main border-t border-perf-border/80">
       {/* Top Wave Layer 1 */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.8 }}
-        className="absolute top-0 left-0 w-full overflow-hidden leading-none z-0"
+        className="absolute top-0 left-0 w-full overflow-hidden leading-none z-0 pointer-events-none"
       >
         <svg
           className="relative block w-full h-16 sm:h-24 md:h-32 text-perf-gold/15"
@@ -31,7 +45,7 @@ export default function Footer() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 1, delay: 0.1 }}
-        className="absolute top-0 left-0 w-full overflow-hidden leading-none z-0"
+        className="absolute top-0 left-0 w-full overflow-hidden leading-none z-0 pointer-events-none"
       >
         <svg
           className="relative block w-full h-20 sm:h-28 md:h-36 text-perf-border/40"
@@ -74,8 +88,44 @@ export default function Footer() {
               </div>
               <div className="flex items-center space-x-3">
                 <Phone size={18} className="text-perf-gold shrink-0" />
-                <span>+1 (800) 767-7935</span>
+                <a
+                  href="tel:+18007677935"
+                  className="hover:text-perf-gold transition-colors duration-300 font-mono"
+                >
+                  +1 (800) 767-7935
+                </a>
               </div>
+              <div className="flex items-center space-x-3">
+                <Mail size={18} className="text-perf-gold shrink-0" />
+                <a
+                  href="mailto:contact@rosswellperfumes.com"
+                  className="hover:text-perf-gold transition-colors duration-300"
+                >
+                  contact@rosswellperfumes.com
+                </a>
+              </div>
+            </div>
+
+            {/* Social Links - LinkedIn & GitHub Only */}
+            <div className="flex items-center gap-3 pt-2">
+              <a
+                href="https://www.linkedin.com/in/sk-kamaluddin"
+                target="_blank"
+                rel="noreferrer"
+                className="h-9 w-9 rounded-xl bg-perf-input-bg border border-perf-border/60 flex items-center justify-center text-perf-text-muted hover:text-perf-gold hover:border-perf-gold transition duration-300"
+                aria-label="LinkedIn"
+              >
+                <FaLinkedinIn size={15} />
+              </a>
+              <a
+                href="https://github.com/kamalcodezen"
+                target="_blank"
+                rel="noreferrer"
+                className="h-9 w-9 rounded-xl bg-perf-input-bg border border-perf-border/60 flex items-center justify-center text-perf-text-muted hover:text-perf-gold hover:border-perf-gold transition duration-300"
+                aria-label="GitHub"
+              >
+                <FaGithub size={16} />
+              </a>
             </div>
           </div>
 
@@ -86,22 +136,10 @@ export default function Footer() {
             </h3>
             <ul className="space-y-2.5 text-base">
               {[
-                {
-                  label: "Home",
-                  path: "/",
-                },
-                {
-                  label: "Collections",
-                  path: "/collections",
-                },
-                {
-                  label: "Best Sellers",
-                  path: "/best-sellers",
-                },
-                {
-                  label: "About",
-                  path: "/about",
-                },
+                { label: "Home", path: "/" },
+                { label: "All Perfumes", path: "/all-perfumes" },
+                { label: "Dashboard", path: "/dashboard" },
+                { label: "Profile", path: "/dashboard/profile" },
               ].map((item) => (
                 <li key={item.label}>
                   <Link
@@ -122,22 +160,10 @@ export default function Footer() {
             </h3>
             <ul className="space-y-2.5 text-base">
               {[
-                {
-                  label: "Contact Us",
-                  path: "/contact",
-                },
-                {
-                  label: "FAQ",
-                  path: "/faq",
-                },
-                {
-                  label: "Privacy Policy",
-                  path: "/privacy",
-                },
-                {
-                  label: "Terms & Conditions",
-                  path: "/terms",
-                },
+                { label: "Sign In", path: "/auth/signin" },
+                { label: "Sign Up", path: "/auth/signup" },
+                { label: "Privacy Policy", path: "/" },
+                { label: "Terms & Conditions", path: "/" },
               ].map((item) => (
                 <li key={item.label}>
                   <Link
@@ -160,21 +186,30 @@ export default function Footer() {
               Subscribe to receive exclusive offers, early access to new
               releases, and luxury fragrance tips.
             </p>
-            <form onSubmit={(e) => e.preventDefault()} className="space-y-2">
+            <form onSubmit={handleSubscribe} className="space-y-2">
               <div className="relative">
                 <input
                   type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email"
+                  required
                   className="w-full px-4 py-2.5 rounded-xl bg-perf-input-bg border border-perf-border text-perf-text-main text-base focus:outline-none focus:border-perf-gold transition-all duration-300 pr-10"
                 />
                 <button
                   type="submit"
-                  className="absolute right-2 top-1/2 -translate-y-1/2 text-perf-gold hover:text-perf-text-main transition-colors duration-300 p-1"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-perf-gold hover:text-perf-text-main transition-colors duration-300 p-1 cursor-pointer"
                   aria-label="Subscribe"
                 >
                   <Send size={18} />
                 </button>
               </div>
+
+              {isSubscribed && (
+                <p className="text-xs text-emerald-400 font-medium flex items-center gap-1 pt-1">
+                  <CheckCircle2 size={14} /> Thank you for subscribing!
+                </p>
+              )}
             </form>
           </div>
         </div>
@@ -186,13 +221,13 @@ export default function Footer() {
           </p>
           <div className="flex space-x-6">
             <Link
-              to="/privacy"
+              to="/"
               className="hover:text-perf-gold transition-colors duration-300"
             >
               Privacy Policy
             </Link>
             <Link
-              to="/terms"
+              to="/"
               className="hover:text-perf-gold transition-colors duration-300"
             >
               Terms of Service
