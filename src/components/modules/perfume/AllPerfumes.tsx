@@ -5,6 +5,7 @@ import { Loader2, Sparkles } from "lucide-react";
 import { getPerfumes } from "../../../lib/api/perfume";
 import PerfumeFilter from "./PerfumeFilter";
 import PerfumeCard from "../../shared/PerfumeCard";
+import PerfumeCardSkeleton from "../../shared/PerfumeCardSkeleton";
 
 interface Perfume {
   _id: string;
@@ -107,12 +108,17 @@ const AllPerfumes = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-perf-bg flex flex-col items-center justify-center gap-3">
-        <Loader2 size={36} className="animate-spin text-perf-gold" />
-        <p className="text-xs font-semibold tracking-widest uppercase text-perf-text-muted">
-          Unveiling Fragrance...
-        </p>
-      </div>
+      <>
+        <div className="mt-6 mb-5 text-xs font-semibold uppercase tracking-wider text-perf-text-muted">
+          Loading perfumes...
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {Array.from({ length: 12 }).map((_, index) => (
+            <PerfumeCardSkeleton key={index} />
+          ))}
+        </div>
+      </>
     );
   }
 
