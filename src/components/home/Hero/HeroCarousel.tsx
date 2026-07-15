@@ -1,6 +1,9 @@
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 import "swiper/css";
 import "swiper/css/navigation";
@@ -15,8 +18,19 @@ import banner3 from "../../../../public/images/banner-3.png";
 import banner4 from "../../../../public/images/banner-4.png";
 
 const HeroCarousel = () => {
+  useEffect(() => {
+    AOS.init({
+      duration: 1200,
+      once: true,
+      easing: "ease-out-cubic",
+    });
+  }, []);
+
   return (
-    <section className="relative h-screen w-full overflow-hidden bg-black text-white">
+    <section
+      className="relative h-screen w-full overflow-hidden bg-black text-white"
+      data-aos="fade-up"
+    >
       <Swiper
         spaceBetween={0}
         centeredSlides={true}
@@ -28,15 +42,11 @@ const HeroCarousel = () => {
         modules={[Autoplay, Pagination, Navigation]}
         className="h-full w-full"
       >
-        {/* =========================================
-            SLIDE 1: BORNTOSTANDOUT (LEFT ALIGNED)
-        ========================================= */}
         <SwiperSlide>
           <div
             className="relative h-screen w-full bg-cover bg-center"
             style={{ backgroundImage: `url(${banner1})` }}
           >
-            {/* Contrast Overlay */}
             <div className="absolute inset-0 bg-gradient-to-r from-black/10 via-black/5 to-transparent z-10" />
 
             <div className="relative z-20 h-full max-w-7xl mx-auto px-6 md:px-10 lg:px-16 flex items-center">
@@ -47,7 +57,6 @@ const HeroCarousel = () => {
                   transition={{ duration: 0.8 }}
                   className="lg:col-span-7 space-y-4 flex flex-col items-start"
                 >
-                  {/* Subtle Text Above Button */}
                   <span className="text-base sm:text-sm font-semibold tracking-[0.3em] text-[#e57c58] uppercase">
                     New Brand Arrival
                   </span>
@@ -94,16 +103,11 @@ const HeroCarousel = () => {
           </div>
         </SwiperSlide>
 
-        {/* =========================================
-            SLIDE 4: LUXURY ESSENTIALS (CENTERED)
-        ========================================= */}
         <SwiperSlide>
           <div
             className="relative h-screen w-full bg-cover bg-center"
             style={{ backgroundImage: `url(${banner4})` }}
           >
-            {/* <div className="absolute inset-0 bg-black/5 z-10" /> */}
-
             <div className="relative z-20 h-full max-w-5xl mx-auto px-6 flex flex-col justify-center items-center text-center pt-65">
               <motion.div
                 initial={{ opacity: 0, y: 40 }}
@@ -111,7 +115,6 @@ const HeroCarousel = () => {
                 transition={{ duration: 0.8 }}
                 className="space-y-4 flex flex-col items-center pt-24"
               >
-                {/* Subtle Text Above Button */}
                 <span className="text-base sm:text-sm font-semibold tracking-[0.35em] text-white/80 uppercase">
                   Unveiling Timeless Elegance
                 </span>
@@ -156,9 +159,6 @@ const HeroCarousel = () => {
           </div>
         </SwiperSlide>
 
-        {/* =========================================
-            SLIDE 2: SIGNATURE SCENTS (RIGHT ALIGNED)
-        ========================================= */}
         <SwiperSlide>
           <div
             className="relative h-screen w-full bg-cover bg-center"
@@ -227,16 +227,11 @@ const HeroCarousel = () => {
           </div>
         </SwiperSlide>
 
-        {/* =========================================
-            SLIDE 3: BRAND HIGHLIGHT (CENTERED)
-        ========================================= */}
         <SwiperSlide>
           <div
             className="relative h-screen w-full bg-cover bg-center"
             style={{ backgroundImage: `url(${banner3})` }}
           >
-            {/* <div className="absolute inset-0 bg-black/5 z-10" /> */}
-
             <div className="relative z-20 h-full max-w-5xl mx-auto px-6 flex flex-col justify-center items-center text-center pt-60">
               <motion.div
                 initial={{ opacity: 0, y: 40 }}
@@ -244,7 +239,6 @@ const HeroCarousel = () => {
                 transition={{ duration: 0.8 }}
                 className="space-y-4 flex flex-col items-center pt-24"
               >
-                {/* Subtle Text Above Button */}
                 <span className="text-base sm:text-sm font-semibold tracking-[0.35em] text-[#e57c58] uppercase">
                   Crafted for Distinction
                 </span>
