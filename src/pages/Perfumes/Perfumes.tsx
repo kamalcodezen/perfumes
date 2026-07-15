@@ -1,8 +1,22 @@
+import { useEffect } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
 import AllPerfumes from "../../components/modules/perfume/AllPerfumes";
 
 const Perfumes = () => {
+  useEffect(() => {
+    AOS.init({
+      duration: 1200,
+      once: true,
+      easing: "ease-out-cubic",
+    });
+  }, []);
+
   return (
-    <section className="min-h-screen bg-perf-bg pt-24 pb-20">
+    <section
+      className="min-h-screen bg-perf-bg pt-24 pb-20 overflow-x-hidden"
+      data-aos="fade-up"
+    >
       <div className="w-11/12 mx-auto">
         <div className="mb-10 text-center">
           <p className="uppercase tracking-[0.35em] text-xs font-semibold text-perf-gold">
