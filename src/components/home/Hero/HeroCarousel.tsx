@@ -20,7 +20,7 @@ import banner4 from "../../../../public/images/banner-4.png";
 const HeroCarousel = () => {
   useEffect(() => {
     AOS.init({
-      duration: 1200,
+      duration: 1000,
       once: true,
       easing: "ease-out-cubic",
     });
