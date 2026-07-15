@@ -1,5 +1,8 @@
+import { useEffect } from "react";
 import { useRouteError, Link, useNavigate } from "react-router-dom";
 import { Home, ArrowLeft, AlertCircle, Compass } from "lucide-react";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 interface RouteError {
   status?: number;
@@ -11,12 +14,24 @@ const ErrorPage = () => {
   const error = useRouteError() as RouteError;
   const navigate = useNavigate();
 
+  // Initialize AOS Animation
+  useEffect(() => {
+    AOS.init({
+      duration: 800,
+      once: true,
+    });
+  }, []);
+
   return (
     <section className="min-h-screen bg-perf-bg text-perf-text-main flex items-center justify-center p-4 sm:p-6 lg:p-8 relative overflow-hidden">
       {/* Background Subtle Luxury Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] sm:w-[500px] h-[350px] sm:h-[500px] bg-perf-gold/10 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] sm:w-[500px] h-[350px] sm:h-[500px] bg-perf-gold/10 rounded-lg blur-[120px] pointer-events-none" />
 
-      <div className="relative w-full max-w-xl bg-perf-card/80 backdrop-blur-xl border border-perf-border/80 rounded-3xl p-8 sm:p-12 text-center shadow-2xl space-y-6">
+      {/* Smooth Fade-Up Entrance Container */}
+      <div
+        data-aos="fade-up"
+        className="relative w-full max-w-xl bg-perf-card/80 backdrop-blur-xl border border-perf-border/80 rounded-3xl p-8 sm:p-12 text-center shadow-sm space-y-6"
+      >
         {/* Top Icon Badge */}
         <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-perf-gold/10 border border-perf-gold/30 text-perf-gold animate-pulse">
           <Compass size={40} className="stroke-[1.5]" />
