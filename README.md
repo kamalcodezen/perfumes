@@ -73,7 +73,7 @@ At a high level:
   - Dynamic re-fetching scripts execute automatically to update current catalog states.
 
 ## 8. Project Structure
-
+```
 ├── backend/ # Server-side TypeScript architecture
 │ ├── src/
 │ │ ├── modules/ # Business logic systems
@@ -94,7 +94,7 @@ At a high level:
 │ └── index.css # Tailwind style engine targets
 ├── package.json
 └── tsconfig.json
-
+```
 ## 9. How the System Works
 
 - User authenticates via the Better-Auth UI platform layout.
