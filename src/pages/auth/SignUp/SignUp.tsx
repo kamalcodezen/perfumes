@@ -1,14 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff, LockKeyhole, Mail, User } from "lucide-react";
 import { toast } from "react-toastify";
 import { authClient } from "../../../lib/auth-client";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const SignUp = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  // Initialize AOS Animation
+  useEffect(() => {
+    AOS.init({
+      duration: 800,
+      once: true,
+    });
+  }, []);
 
   // Form State
   const [formData, setFormData] = useState({
@@ -31,13 +41,11 @@ const SignUp = () => {
   const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // 1. Password Match Check
     if (formData.password !== formData.confirmPassword) {
       toast.error("Passwords do not match");
       return;
     }
 
-    // 2. Minimum Password Length Check (Better Auth default: min 8 chars)
     if (formData.password.length < 8) {
       toast.error("Password must be at least 8 characters long");
       return;
@@ -52,16 +60,13 @@ const SignUp = () => {
         password: formData.password,
       });
 
-      // Check for Better Auth Error Response
       if (res.error) {
         toast.error(res.error.message || "Failed to create account");
-        // console.error("Better Auth Error:", res.error);
       } else {
         toast.success("Account created successfully");
         navigate("/");
       }
     } catch (error: any) {
-      // 3. Network or Server Connectivity Errors
       console.error("Signup Submission Catch Error:", error);
       toast.error(
         error?.message ||
@@ -73,8 +78,12 @@ const SignUp = () => {
   };
 
   return (
-    <section className="min-h-screen bg-perf-bg flex items-center justify-center p-4 sm:p-6">
-      <div className="w-full max-w-md rounded-2xl border border-perf-border bg-perf-card p-6 sm:p-8 shadow-md">
+    <section className="min-h-screen bg-perf-bg flex items-center justify-center p-4 sm:p-6 overflow-hidden">
+      {/* Dynamic Flip-Left Card Container */}
+      <div
+        data-aos="flip-left"
+        className="w-full max-w-md rounded-2xl border border-perf-border bg-perf-card p-6 sm:p-8 shadow-md"
+      >
         {/* Simple Header */}
         <div className="text-center">
           <h1 className="text-2xl font-bold text-perf-text-main font-serif-luxury">
@@ -144,7 +153,7 @@ const SignUp = () => {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="text-perf-text-muted hover:text-perf-text-main transition ml-2"
+                className="text-perf-text-muted hover:text-perf-text-main transition ml-2 cursor-pointer"
               >
                 {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
@@ -170,7 +179,7 @@ const SignUp = () => {
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="text-perf-text-muted hover:text-perf-text-main transition ml-2"
+                className="text-perf-text-muted hover:text-perf-text-main transition ml-2 cursor-pointer"
               >
                 {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
