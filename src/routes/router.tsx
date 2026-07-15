@@ -14,6 +14,7 @@ import PerfumeDetails from "../pages/Perfumes/PerfumeDetails";
 import About from "../pages/About/About";
 import ManagePerfumes from "../pages/dashboard/admin/ManagePerfumes";
 import ContactPage from "../pages/Contact/ContactPage";
+import ProtectedRoute from "../components/shared/ProtectedRoute";
 
 export const router = createBrowserRouter([
   {
@@ -31,7 +32,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "perfumes/:id",
-        element: <PerfumeDetails />,
+        element: (
+          <ProtectedRoute>
+            <PerfumeDetails />,
+          </ProtectedRoute>
+        ),
       },
       {
         path: "about",
@@ -64,7 +69,11 @@ export const router = createBrowserRouter([
   // Dashboard Routes
   {
     path: "dashboard",
-    element: <DashboardLayout />,
+    element: (
+      <ProtectedRoute>
+        <DashboardLayout />
+      </ProtectedRoute>
+    ),
     errorElement: <ErrorPage />,
     children: [
       // Shared
@@ -86,11 +95,19 @@ export const router = createBrowserRouter([
       // Admin
       {
         path: "add-perfume",
-        element: <AddPerfume />,
+        element: (
+          <ProtectedRoute>
+            <AddPerfume />,
+          </ProtectedRoute>
+        ),
       },
       {
         path: "manage-perfumes",
-        element: <ManagePerfumes />,
+        element: (
+          <ProtectedRoute>
+            <ManagePerfumes />,
+          </ProtectedRoute>
+        ),
       },
       // {
       //   path: "manage-users",
